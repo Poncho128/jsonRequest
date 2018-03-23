@@ -3,15 +3,22 @@ package mx.itesm.jsonrequest;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ListView;
 
 import org.json.JSONArray;
 
 public class MainActivity extends AppCompatActivity implements AsyncJsonHandler.JSONListener {
 
+    public ListView list_hobbies;
+    private JSONArray my_json;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        this.list_hobbies = (ListView) findViewById(R.id.friend_list);
+        //this.list_hobbies.setOnItemClickListener(this);
     }
 
     public void loadMyAmazingJSON(View view){
@@ -22,6 +29,12 @@ public class MainActivity extends AppCompatActivity implements AsyncJsonHandler.
 
     @Override
     public void requestDone(JSONArray jsonArray) {
-
+        try {
+            this.my_json = jsonArray;
+            JsonAdapter adapter = new JsonAdapter(jsonArray, this);
+            this.list_hobbies.setAdapter(adapter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
